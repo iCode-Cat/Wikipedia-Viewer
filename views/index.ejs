@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+</head>
+<body class="flex">
+    <section class="flex flex-col">
+    <h1>Click here for random article</h1>
+    <div class="search flex">
+        <input class="input" type="text">
+        <i class="value fas fa-search fa-4x"></i>
+    </div>
+    <div class="results">
+        <h1 class="title">Turkey</h1>
+        <p class="content">
+            Turkish (Türkçe (listen), Türk dili), also referred to as Istanbul Turkish (İstanbul Türkçesi) or Turkey Turkish (Türkiye Türkçesi), is the most widely spoken of the Turkic languages, with around 70 to 80 million speakers, the national language of Turkey.
+        </p>
+    </div>
+    </section>
+
+    <script>
+        //Declare the elements
+        const get = document.querySelector('.value');
+        const value = document.querySelector('.input');
+
+        get.onclick = async() => {
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({data:value.value})
+            }
+           fetch('/' , options);
+           await fetch('/query')
+           .then(res => res.json())
+           .then(data => console.log(data))
+
+        //    send to page when onclick 
+        //    https://en.wikipedia.org/?curid=29992
+        }
+    </script>
+</body>
+</html>
