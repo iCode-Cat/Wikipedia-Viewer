@@ -9,41 +9,73 @@
 </head>
 <body class="flex">
     <section class="flex flex-col">
-    <h1>Click here for random article</h1>
+    <a target="_blank" href="https://en.wikipedia.org/wiki/Special:Random"><h1>Click here for random article</h1></a>
     <div class="search flex">
         <input class="input" type="text">
         <i class="value fas fa-search fa-4x"></i>
     </div>
-    <div class="results">
-        <h1 class="title">Turkey</h1>
-        <p class="content">
-            Turkish (Türkçe (listen), Türk dili), also referred to as Istanbul Turkish (İstanbul Türkçesi) or Turkey Turkish (Türkiye Türkçesi), is the most widely spoken of the Turkic languages, with around 70 to 80 million speakers, the national language of Turkey.
-        </p>
+    <div  class="results">
+  
     </div>
     </section>
 
     <script>
+        
         //Declare the elements
         const get = document.querySelector('.value');
         const value = document.querySelector('.input');
-
+        const results = document.querySelector(".results");
+        
+        let allow;
+    
+        allow = true;
         get.onclick = async() => {
-
+            
+            if (allow == true) {
+            allow = false;
+            const articles = document.querySelectorAll(".article");
+            console.log("hey");
+            
             const options = {
                 method: 'POST',
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json; charset=UTF-8'
+
                 },
                 body:JSON.stringify({data:value.value})
             }
            fetch('/' , options);
+           
            await fetch('/query')
            .then(res => res.json())
-           .then(data => console.log(data))
+           .then(data => {
+               setTimeout(() => {
+                allow = true;
+               }, 1000);
+           Object.values(data['query'].pages).forEach(wiki => {
+
+            //Clear the div
+           if(results.childElementCount > 0) {
+              articles.forEach(document => {
+                  document.remove();
+              })
+           };
+            results.insertAdjacentHTML("beforeend" , `<a draggable="true" class="article a" target="_blank" href="https://en.wikipedia.org/?curid=${wiki.pageid}"><div class=""><h1 class="title">${wiki.title}<h1><p class="content">${wiki.extract} </p></div></a>`)
+            console.log(wiki.title, wiki.extract);
+           
+           })
+        })
+        
+        .catch(err => {
+            console.log(err);
+        }) 
+           
 
         //    send to page when onclick 
-        //    https://en.wikipedia.org/?curid=29992
+        //    
+    }
         }
+   
     </script>
 </body>
 </html>
